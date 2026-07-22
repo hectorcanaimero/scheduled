@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AgendamientoModule } from './agendamiento/agendamiento.module';
 import { Agendamiento } from './agendamiento/entities/agendamiento.entity';
 import { BloqueoHorario } from './agendamiento/entities/bloqueo-horario.entity';
+import { AuthModule } from './auth/auth.module';
+import { Usuario } from './auth/entities/usuario.entity';
 import { TurnosModule } from './turnos/turnos.module';
 import { WebhookModule } from './webhook/webhook.module';
 import { AgendaModule } from './agenda/agenda.module';
@@ -24,9 +26,10 @@ import { Turno } from './turno/entities/turno.entity';
       username: process.env.DB_USER ?? 'postgres',
       password: process.env.DB_PASS ?? 'postgres',
       database: process.env.DB_NAME ?? 'scheduled',
-      entities: [Agendamiento, BloqueoHorario, Paciente, Profesional, Disponibilidad, Turno],
+      entities: [Agendamiento, BloqueoHorario, Usuario, Paciente, Profesional, Disponibilidad, Turno],
       synchronize: process.env.NODE_ENV !== 'production',
     }),
+    AuthModule,
     AgendamientoModule,
     TurnosModule,
     WebhookModule,
