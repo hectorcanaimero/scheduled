@@ -9,25 +9,33 @@ import {
 export class WebhookService {
   private readonly logger = new Logger(WebhookService.name);
 
-  async handleWhatsappEvent(event: WhatsappEventDto): Promise<void> {
-    this.logger.log(`Received event: ${event.event} from instance: ${event.instance}`);
+  async handleWhatsappEvent(
+    event: WhatsappEventDto,
+    clinicaId: string,
+    webhookToken: string,
+  ): Promise<void> {
+    this.logger.log(`Event: ${event.event} | instance: ${event.instance} | clinica: ${clinicaId}`);
 
     switch (event.event) {
       case 'MESSAGES_UPSERT':
-        await this.handleMessageUpsert(event);
+        await this.handleMessageUpsert(event, clinicaId, webhookToken);
         break;
       case 'CONNECTION_UPDATE':
         await this.handleConnectionUpdate(event);
         break;
       case 'MESSAGES_UPDATE':
-        this.logger.log(`Message status update for instance: ${event.instance}`);
+        this.logger.log(`Message status update | clinica: ${clinicaId}`);
         break;
       default:
         this.logger.warn(`Unhandled event type: ${event.event}`);
     }
   }
 
-  private async handleMessageUpsert(event: WhatsappEventDto): Promise<void> {
+  private async handleMessageUpsert(
+    event: WhatsappEventDto,
+    clinicaId: string,
+    webhookToken: string,
+  ): Promise<void> {
     const data = event.data as MessageDataDto;
 
     if (data.key?.fromMe) {
@@ -35,22 +43,19 @@ export class WebhookService {
     }
 
     const remoteJid = data.key?.remoteJid ?? '';
-    const isGroup = remoteJid.endsWith('@g.us');
-
-    if (isGroup) {
+    if (remoteJid.endsWith('@g.us')) {
       return;
     }
 
     const text = this.extractMessageText(data);
-
     if (!text) {
-      this.logger.log(`Non-text message received from ${remoteJid}, skipping`);
       return;
     }
 
-    this.logger.log(`Message from ${remoteJid} (${data.pushName}): ${text}`);
-
-    // TODO (AGD-001): route message to Insforge scheduling flow
+    // TODO (AGD-020 / AGD-022): forward to Insforge scheduling flow
+    // Pass webhookToken as Authorization: Bearer <webhookToken> on downstream HTTP calls
+    this.logger.log(`Message received | clinica: ${clinicaId} | sender: ${remoteJid}`);
+    void webhookToken; // available for downstream HTTP clients
   }
 
   private async handleConnectionUpdate(event: WhatsappEventDto): Promise<void> {
