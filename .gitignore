@@ -31,7 +31,10 @@ lerna-debug.log*
 .vscode/*
 !.vscode/extensions.json
 
-# Misc
+# local env files
 .env
 .env.*
 !.env.example
+
+# TypeScript cache
+*.tsbuildinfo
