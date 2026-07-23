@@ -1,6 +1,5 @@
-import { AgendaView } from "./turnos/agenda-view";
-import { turnos } from "./turnos/data";
+import { ClinicSettings } from "@/components/clinic-settings";
 
-export default function Home() {
-  return <AgendaView initialTurnos={turnos} />;
+export default function SettingsPage() {
+  return <ClinicSettings />;
 }
