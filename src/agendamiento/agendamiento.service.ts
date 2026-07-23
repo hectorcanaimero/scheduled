@@ -8,7 +8,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Turno } from '../turno/entities/turno.entity';
 import { AgendamientoDetalleDto } from './dto/agendamiento-detalle.dto';
+import { TenantContextService } from '../common/tenant/tenant-context.service';
+import { v4 as uuidv4 } from 'uuid';
+import { WhatsappService } from '../whatsapp/whatsapp.service';
 import { ConfirmarAgendamientoDto } from './dto/confirmar-agendamiento.dto';
+import { GenerarLinkDto } from './dto/generar-link.dto';
 import { Agendamiento, EstadoAgendamiento } from './entities/agendamiento.entity';
 import { BloqueoHorario } from './entities/bloqueo-horario.entity';
 
@@ -22,6 +26,8 @@ export class AgendamientoService {
     @InjectRepository(Turno)
     private readonly turnoRepo: Repository<Turno>,
     private readonly dataSource: DataSource,
+    private readonly tenantContext: TenantContextService,
+    private readonly whatsapp: WhatsappService,
   ) {}
 
   async findByLinkToken(link_token: string): Promise<AgendamientoDetalleDto> {
@@ -50,6 +56,37 @@ export class AgendamientoService {
       estado: turno.estado,
       paciente_nombre: turno.paciente.nombre,
     };
+  async generarYEnviarLink(dto: GenerarLinkDto): Promise<{ link_token: string; link: string }> {
+    const link_token = uuidv4();
+    const baseUrl = process.env.SCHEDULING_BASE_URL ?? 'https://localhost:3000';
+
+    const agendamiento = this.agendamientoRepo.create({
+      link_token,
+      clinica_id: dto.clinica_id,
+      paciente_nombre: dto.paciente_nombre,
+      paciente_telefono: dto.paciente_telefono,
+      profesional_id: dto.profesional_id,
+      fecha_hora: new Date(dto.fecha_hora),
+      duracion_minutos: dto.duracion_minutos ?? 30,
+      estado: EstadoAgendamiento.PENDIENTE,
+    });
+
+    await this.agendamientoRepo.save(agendamiento);
+
+    const link = `${baseUrl}/agendar/${dto.clinica_id}?token=${link_token}`;
+
+    const message = [
+      `¡Hola, ${dto.paciente_nombre}! Tu turno fue creado.`,
+      '',
+      `📅 Confirmá tu horario haciendo clic en el siguiente link:`,
+      `🔗 ${link}`,
+      '',
+      `⚠️ El link expira en 24 horas.`,
+    ].join('\n');
+
+    await this.whatsapp.sendText(dto.paciente_telefono, message);
+
+    return { link_token, link };
   }
 
   async confirmar(
@@ -61,6 +98,7 @@ export class AgendamientoService {
     await queryRunner.startTransaction();
 
     try {
+      // Lookup por token sin tenant seteado — RLS permite NULL (token es el auth)
       const agendamiento = await queryRunner.manager.findOne(Agendamiento, {
         where: { link_token },
         lock: { mode: 'pessimistic_write' },
@@ -79,6 +117,9 @@ export class AgendamientoService {
       if (agendamiento.estado === EstadoAgendamiento.CANCELADO) {
         throw new BadRequestException('El agendamiento fue cancelado');
       }
+
+      // Seteamos el tenant para el resto de la transacción — RLS enforcea a partir de acá
+      await this.tenantContext.setTenant(queryRunner, agendamiento.clinica_id);
 
       const finHorario = new Date(agendamiento.fecha_hora);
       finHorario.setMinutes(
