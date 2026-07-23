@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
+import { TenantContextService } from '../common/tenant/tenant-context.service';
 import { v4 as uuidv4 } from 'uuid';
 import { WhatsappService } from '../whatsapp/whatsapp.service';
 import { ConfirmarAgendamientoDto } from './dto/confirmar-agendamiento.dto';
@@ -21,6 +22,7 @@ export class AgendamientoService {
     @InjectRepository(BloqueoHorario)
     private readonly bloqueoRepo: Repository<BloqueoHorario>,
     private readonly dataSource: DataSource,
+    private readonly tenantContext: TenantContextService,
     private readonly whatsapp: WhatsappService,
   ) {}
 
@@ -66,6 +68,7 @@ export class AgendamientoService {
     await queryRunner.startTransaction();
 
     try {
+      // Lookup por token sin tenant seteado — RLS permite NULL (token es el auth)
       const agendamiento = await queryRunner.manager.findOne(Agendamiento, {
         where: { link_token },
         lock: { mode: 'pessimistic_write' },
@@ -84,6 +87,9 @@ export class AgendamientoService {
       if (agendamiento.estado === EstadoAgendamiento.CANCELADO) {
         throw new BadRequestException('El agendamiento fue cancelado');
       }
+
+      // Seteamos el tenant para el resto de la transacción — RLS enforcea a partir de acá
+      await this.tenantContext.setTenant(queryRunner, agendamiento.clinica_id);
 
       const finHorario = new Date(agendamiento.fecha_hora);
       finHorario.setMinutes(

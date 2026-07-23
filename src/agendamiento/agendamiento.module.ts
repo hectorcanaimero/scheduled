@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TenantContextService } from '../common/tenant/tenant-context.service';
 import { AuthModule } from '../auth/auth.module';
 import { WhatsappModule } from '../whatsapp/whatsapp.module';
 import { AgendamientoController } from './agendamiento.controller';
@@ -14,6 +15,6 @@ import { BloqueoHorario } from './entities/bloqueo-horario.entity';
     AuthModule,
   ],
   controllers: [AgendamientoController],
-  providers: [AgendamientoService],
+  providers: [AgendamientoService, TenantContextService],
 })
 export class AgendamientoModule {}
