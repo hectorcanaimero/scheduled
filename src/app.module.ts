@@ -4,6 +4,7 @@ import { AgendamientoModule } from './agendamiento/agendamiento.module';
 import { Agendamiento } from './agendamiento/entities/agendamiento.entity';
 import { BloqueoHorario } from './agendamiento/entities/bloqueo-horario.entity';
 import { WebhookModule } from './webhook/webhook.module';
+import { AgendaModule } from './agenda/agenda.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { WebhookModule } from './webhook/webhook.module';
     }),
     AgendamientoModule,
     WebhookModule,
+    AgendaModule,
   ],
 })
 export class AppModule {}
