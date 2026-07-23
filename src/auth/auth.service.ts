@@ -18,6 +18,15 @@ interface InsforgeUser {
   email: string;
 }
 
+interface LoginResponse {
+  access_token: string;
+  usuario: {
+    id: string;
+    nombre: string;
+    clinica_id: string;
+  };
+}
+
 @Injectable()
 export class AuthService {
   private readonly insforgeUrl = process.env.INSFORGE_URL ?? '';
