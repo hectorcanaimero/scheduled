@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Turno } from '../turno/entities/turno.entity';
 import { TenantContextService } from '../common/tenant/tenant-context.service';
 import { AuthModule } from '../auth/auth.module';
 import { WhatsappModule } from '../whatsapp/whatsapp.module';
@@ -10,7 +11,7 @@ import { BloqueoHorario } from './entities/bloqueo-horario.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Agendamiento, BloqueoHorario]),
+    TypeOrmModule.forFeature([Agendamiento, BloqueoHorario, Turno]),
     WhatsappModule,
     AuthModule,
   ],

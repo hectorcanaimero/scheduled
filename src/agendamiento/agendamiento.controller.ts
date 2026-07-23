@@ -8,6 +8,9 @@ import { GenerarLinkDto } from './dto/generar-link.dto';
 export class AgendamientoController {
   constructor(private readonly agendamientoService: AgendamientoService) {}
 
+  @Get(':link_token')
+  findOne(@Param('link_token') link_token: string) {
+    return this.agendamientoService.findByLinkToken(link_token);
   @Post('generar-link')
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(JwtAuthGuard)

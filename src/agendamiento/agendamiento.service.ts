@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
+import { Turno } from '../turno/entities/turno.entity';
+import { AgendamientoDetalleDto } from './dto/agendamiento-detalle.dto';
 import { TenantContextService } from '../common/tenant/tenant-context.service';
 import { v4 as uuidv4 } from 'uuid';
 import { WhatsappService } from '../whatsapp/whatsapp.service';
@@ -21,11 +23,39 @@ export class AgendamientoService {
     private readonly agendamientoRepo: Repository<Agendamiento>,
     @InjectRepository(BloqueoHorario)
     private readonly bloqueoRepo: Repository<BloqueoHorario>,
+    @InjectRepository(Turno)
+    private readonly turnoRepo: Repository<Turno>,
     private readonly dataSource: DataSource,
     private readonly tenantContext: TenantContextService,
     private readonly whatsapp: WhatsappService,
   ) {}
 
+  async findByLinkToken(link_token: string): Promise<AgendamientoDetalleDto> {
+    const turno = await this.turnoRepo.findOne({
+      where: { link_token },
+      relations: ['profesional', 'disponibilidad', 'paciente'],
+    });
+
+    if (!turno) {
+      throw new NotFoundException(
+        `Agendamiento con token "${link_token}" no encontrado`,
+      );
+    }
+
+    return {
+      link_token: turno.link_token,
+      profesional: {
+        nombre: turno.profesional.nombre,
+        especialidad: turno.profesional.especialidad,
+      },
+      disponibilidad: {
+        fecha: turno.disponibilidad.fecha,
+        horario: turno.disponibilidad.horario,
+      },
+      valor: Number(turno.valor),
+      estado: turno.estado,
+      paciente_nombre: turno.paciente.nombre,
+    };
   async generarYEnviarLink(dto: GenerarLinkDto): Promise<{ link_token: string; link: string }> {
     const link_token = uuidv4();
     const baseUrl = process.env.SCHEDULING_BASE_URL ?? 'https://localhost:3000';
