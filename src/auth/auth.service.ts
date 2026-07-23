@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { firstValueFrom } from 'rxjs';
 import { Repository } from 'typeorm';
-import { JwtPayload } from './auth.types';
+import { JwtPayload, LoginResponse } from './auth.types';
 import { LoginDto } from './dto/login.dto';
 import { Usuario } from './entities/usuario.entity';
 
