@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --ink: #17352f;
+  --ink: #07382d;
+  --paper: #f6f3e9;
   --muted: #66756f;
-  --paper: #f6f4ed;
   --card: #fffefa;
   --line: #dfe2d8;
   --sage: #dbe9de;
@@ -17,6 +17,23 @@
 body {
   margin: 0;
   color: var(--ink);
+  background:
+    radial-gradient(circle at 8% 0%, rgba(246, 177, 95, .20), transparent 34rem),
+    radial-gradient(circle at 100% 100%, rgba(64, 145, 108, .15), transparent 34rem),
+    var(--paper);
+  font-family: var(--font-sans), sans-serif;
+}
+
+.font-display { font-family: var(--font-display), serif; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
   background: var(--paper);
   font-family: var(--font-body), sans-serif;
 }
