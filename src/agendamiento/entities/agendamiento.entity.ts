@@ -22,28 +22,12 @@ export class Agendamiento {
   link_token: string;
 
   @Column()
-  paciente_nombre: string;
-
-  @Column({ nullable: true })
-  paciente_telefono: string;
-
-  @Column()
-  clinica_nombre: string;
-
-  @Column({ nullable: true })
-  clinica_direccion: string;
-
-  @Column({ nullable: true })
-  especialista_nombre: string;
-
-  @Column({ nullable: true })
-  especialidad: string;
   clinica_id: string;
 
   @Column()
   paciente_nombre: string;
 
-  @Column()
+  @Column({ nullable: true })
   paciente_telefono: string;
 
   @Column()
@@ -52,21 +36,6 @@ export class Agendamiento {
   @Column({ type: 'timestamp' })
   fecha_hora: Date;
 
-  @Column({ nullable: true })
-  duracion_minutos: number;
-
-  @Column({ nullable: true })
-  notas: string;
-
-  @Column({
-    type: 'enum',
-    enum: AgendamientoStatus,
-    default: AgendamientoStatus.PENDIENTE,
-  })
-  status: AgendamientoStatus;
-
-  @Column({ nullable: true })
-  whatsapp_mensaje_id: string;
   @Column({ type: 'int', default: 30 })
   duracion_minutos: number;
 
