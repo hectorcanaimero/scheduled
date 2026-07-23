@@ -7,7 +7,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { TenantContextService } from '../common/tenant/tenant-context.service';
+import { v4 as uuidv4 } from 'uuid';
+import { WhatsappService } from '../whatsapp/whatsapp.service';
 import { ConfirmarAgendamientoDto } from './dto/confirmar-agendamiento.dto';
+import { GenerarLinkDto } from './dto/generar-link.dto';
 import { Agendamiento, EstadoAgendamiento } from './entities/agendamiento.entity';
 import { BloqueoHorario } from './entities/bloqueo-horario.entity';
 
@@ -20,7 +23,41 @@ export class AgendamientoService {
     private readonly bloqueoRepo: Repository<BloqueoHorario>,
     private readonly dataSource: DataSource,
     private readonly tenantContext: TenantContextService,
+    private readonly whatsapp: WhatsappService,
   ) {}
+
+  async generarYEnviarLink(dto: GenerarLinkDto): Promise<{ link_token: string; link: string }> {
+    const link_token = uuidv4();
+    const baseUrl = process.env.SCHEDULING_BASE_URL ?? 'https://localhost:3000';
+
+    const agendamiento = this.agendamientoRepo.create({
+      link_token,
+      clinica_id: dto.clinica_id,
+      paciente_nombre: dto.paciente_nombre,
+      paciente_telefono: dto.paciente_telefono,
+      profesional_id: dto.profesional_id,
+      fecha_hora: new Date(dto.fecha_hora),
+      duracion_minutos: dto.duracion_minutos ?? 30,
+      estado: EstadoAgendamiento.PENDIENTE,
+    });
+
+    await this.agendamientoRepo.save(agendamiento);
+
+    const link = `${baseUrl}/agendar/${dto.clinica_id}?token=${link_token}`;
+
+    const message = [
+      `¡Hola, ${dto.paciente_nombre}! Tu turno fue creado.`,
+      '',
+      `📅 Confirmá tu horario haciendo clic en el siguiente link:`,
+      `🔗 ${link}`,
+      '',
+      `⚠️ El link expira en 24 horas.`,
+    ].join('\n');
+
+    await this.whatsapp.sendText(dto.paciente_telefono, message);
+
+    return { link_token, link };
+  }
 
   async confirmar(
     link_token: string,
