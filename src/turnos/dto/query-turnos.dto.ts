@@ -7,8 +7,7 @@ export class QueryTurnosDto {
   @IsDateString()
   fecha?: string;
 
-  @IsOptional()
-  @IsUUID()
+  // clinica_id siempre viene del JWT (@CurrentUser), nunca del query param
   clinica_id?: string;
 
   @IsOptional()
