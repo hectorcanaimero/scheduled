@@ -1,27 +1,21 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, DM_Sans } from "next/font/google";
-
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import "./globals.css";
-
-const sans = DM_Sans({ subsets: ["latin"], variable: "--font-sans" });
-const display = Fraunces({ subsets: ["latin"], variable: "--font-display" });
 
 const display = Cormorant_Garamond({
   subsets: ["latin"],
   variable: "--font-display",
-  weight: ["500", "600", "700"],
+  weight: ["600", "700"],
 });
 
-const body = DM_Sans({
+const body = Manrope({
   subsets: ["latin"],
   variable: "--font-body",
-  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "Tu consulta | Agendamiento",
-  description: "Revisá los datos de tu próxima consulta.",
-  themeColor: "#f3efe6",
+  title: "Configuración · Clínica Aurora",
+  description: "Panel de configuración de la clínica",
 };
 
 export default function RootLayout({
