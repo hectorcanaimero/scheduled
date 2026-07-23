@@ -6,11 +6,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export enum AgendamientoStatus {
+export enum EstadoAgendamiento {
   PENDIENTE = 'pendiente',
   CONFIRMADO = 'confirmado',
   CANCELADO = 'cancelado',
-  COMPLETADO = 'completado',
+  BLOQUEADO = 'bloqueado',
 }
 
 @Entity('agendamientos')
@@ -38,6 +38,16 @@ export class Agendamiento {
 
   @Column({ nullable: true })
   especialidad: string;
+  clinica_id: string;
+
+  @Column()
+  paciente_nombre: string;
+
+  @Column()
+  paciente_telefono: string;
+
+  @Column()
+  profesional_id: string;
 
   @Column({ type: 'timestamp' })
   fecha_hora: Date;
@@ -57,6 +67,21 @@ export class Agendamiento {
 
   @Column({ nullable: true })
   whatsapp_mensaje_id: string;
+  @Column({ type: 'int', default: 30 })
+  duracion_minutos: number;
+
+  @Column({
+    type: 'enum',
+    enum: EstadoAgendamiento,
+    default: EstadoAgendamiento.PENDIENTE,
+  })
+  estado: EstadoAgendamiento;
+
+  @Column({ nullable: true })
+  confirmado_por: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  confirmado_en: Date;
 
   @CreateDateColumn()
   created_at: Date;
