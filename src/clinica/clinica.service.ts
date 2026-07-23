@@ -11,6 +11,8 @@ export class ClinicaService {
     private readonly clinicaRepo: Repository<Clinica>,
   ) {}
 
+  findByInstance(instanceEvo: string): Promise<Clinica | null> {
+    return this.clinicaRepo.findOne({ where: { instance_evo: instanceEvo } });
   async findByClinicaId(clinicaId: string): Promise<Clinica> {
     const clinica = await this.clinicaRepo.findOne({ where: { id: clinicaId } });
     if (!clinica) throw new NotFoundException('Clínica no encontrada');
