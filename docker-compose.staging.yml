@@ -1,0 +1,69 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${DB_USER:-scheduled}
+      - POSTGRES_PASSWORD=${DB_PASS:-scheduled}
+      - POSTGRES_DB=${DB_NAME:-scheduled}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-scheduled} -d ${DB_NAME:-scheduled}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=${DB_USER:-scheduled}
+      - DB_PASS=${DB_PASS:-scheduled}
+      - DB_NAME=${DB_NAME:-scheduled}
+      - JWT_SECRET=${JWT_SECRET}
+      - INSFORGE_URL=${INSFORGE_URL}
+      - EVO_URL=${EVO_URL}
+      - EVO_API_KEY=${EVO_API_KEY}
+      - SCHEDULING_BASE_URL=https://scheduling.staging.cndr.me
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: web
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    environment:
+      - NODE_ENV=production
+      - API_URL=http://api:3000
+      - NEXT_PUBLIC_API_URL=https://api.staging.cndr.me
+    depends_on:
+      - api
+
+  reception:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3003:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=https://api.staging.cndr.me
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
