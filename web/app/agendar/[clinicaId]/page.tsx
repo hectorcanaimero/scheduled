@@ -126,4 +126,18 @@ export default function BookingPage() {
 
 function StateCard({ icon, title, copy }: { icon: React.ReactNode; title: string; copy: string }) {
   return <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex min-h-[420px] flex-col items-center justify-center text-center text-emerald-900"><span className="grid size-16 place-items-center rounded-2xl bg-emerald-50">{icon}</span><h2 className="font-display mt-6 text-3xl">{title}</h2><p className="mt-3 max-w-sm text-sm leading-6 text-stone-600">{copy}</p></motion.div>;
+import { notFound, redirect } from "next/navigation";
+
+export default async function LegacyAppointmentLink({
+  searchParams,
+}: {
+  searchParams: { token?: string | string[] };
+}) {
+  const { token } = searchParams;
+
+  if (typeof token !== "string" || token.length === 0) {
+    notFound();
+  }
+
+  redirect(`/agendamiento/${encodeURIComponent(token)}`);
 }
