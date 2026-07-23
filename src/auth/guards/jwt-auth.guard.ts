@@ -6,6 +6,10 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '../auth.types';
+interface JwtPayload {
+  sub: string;
+  clinica_id: string;
+}
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -15,7 +19,6 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<{ headers: Record<string, string>; user?: JwtPayload }>();
     const token = this.extractToken(request);
     if (!token) throw new UnauthorizedException('Token requerido');
-
     try {
       const payload = this.jwtService.verify<JwtPayload>(token);
       request.user = payload;

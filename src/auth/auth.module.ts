@@ -1,3 +1,5 @@
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
@@ -9,6 +11,12 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Module({
   imports: [
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+    }),
+  ],
+  providers: [JwtAuthGuard],
+  exports: [JwtModule, JwtAuthGuard],
     HttpModule,
     TypeOrmModule.forFeature([Usuario]),
     JwtModule.register({

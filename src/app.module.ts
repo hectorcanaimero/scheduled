@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AgendamientoModule } from './agendamiento/agendamiento.module';
 import { Agendamiento } from './agendamiento/entities/agendamiento.entity';
 import { BloqueoHorario } from './agendamiento/entities/bloqueo-horario.entity';
+import { ClinicaModule } from './clinica/clinica.module';
+import { Clinica } from './clinica/entities/clinica.entity';
 import { AuthModule } from './auth/auth.module';
 import { Usuario } from './auth/entities/usuario.entity';
 import { TurnosModule } from './turnos/turnos.module';
@@ -33,6 +35,7 @@ import { Turno } from './turno/entities/turno.entity';
     AgendamientoModule,
     TurnosModule,
     WebhookModule,
+    ClinicaModule,
     AgendaModule,
     PacienteModule,
     ProfesionalModule,
