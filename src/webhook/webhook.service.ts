@@ -51,14 +51,12 @@ export class WebhookService {
 
     const text = this.extractMessageText(data);
     if (!text) {
+      this.logger.log(`Non-text message received from instance: ${event.instance}, skipping`);
       return;
     }
 
-    // TODO (AGD-020 / AGD-022): forward to Insforge scheduling flow
-    // Pass webhookToken as Authorization: Bearer <webhookToken> on downstream HTTP calls
-    this.logger.log(`Message received | clinica: ${clinicaId} | sender: ${remoteJid}`);
-    void webhookToken; // available for downstream HTTP clients
-    this.logger.log(`Message from ${remoteJid} (${data.pushName}): ${text}`);
+    this.logger.log(`Text message received from instance: ${event.instance}`);
+
     await this.receptionAgent.handleIncomingMessage(remoteJid, text, event.instance);
   }
 
