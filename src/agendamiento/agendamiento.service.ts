@@ -44,12 +44,12 @@ export class AgendamientoService {
     const link = `${baseUrl}/agendar/${dto.clinica_id}?token=${link_token}`;
 
     const message = [
-      `Olá, ${dto.paciente_nombre}! Seu agendamento foi criado.`,
+      `¡Hola, ${dto.paciente_nombre}! Tu turno fue creado.`,
       '',
-      `📅 Confirme seu horário clicando no link abaixo:`,
+      `📅 Confirmá tu horario haciendo clic en el siguiente link:`,
       `🔗 ${link}`,
       '',
-      `⚠️ O link expira em 24 horas.`,
+      `⚠️ El link expira en 24 horas.`,
     ].join('\n');
 
     await this.whatsapp.sendText(dto.paciente_telefono, message);

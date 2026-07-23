@@ -1,4 +1,5 @@
-import { Body, Controller, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AgendamientoService } from './agendamiento.service';
 import { ConfirmarAgendamientoDto } from './dto/confirmar-agendamiento.dto';
 import { GenerarLinkDto } from './dto/generar-link.dto';
@@ -9,6 +10,7 @@ export class AgendamientoController {
 
   @Post('generar-link')
   @HttpCode(HttpStatus.CREATED)
+  @UseGuards(JwtAuthGuard)
   generarLink(@Body() dto: GenerarLinkDto) {
     return this.agendamientoService.generarYEnviarLink(dto);
   }

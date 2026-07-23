@@ -25,9 +25,9 @@ export class WhatsappService {
         text,
         delay: 1200,
       });
-      this.logger.log(`Message sent to ${number}`);
+      this.logger.log(`Message sent via instance: ${this.instance}`);
     } catch (err) {
-      this.logger.error(`Failed to send message to ${number}: ${err?.message}`);
+      this.logger.error(`Failed to send message via instance ${this.instance}: ${(err as Error)?.message}`);
       throw err;
     }
   }
