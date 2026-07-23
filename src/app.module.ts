@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AgendamientoModule } from './agendamiento/agendamiento.module';
+import { Agendamiento } from './agendamiento/entities/agendamiento.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AgendamientoModule } from './agendamiento/agendamiento.module';
 import { Agendamiento } from './agendamiento/entities/agendamiento.entity';
