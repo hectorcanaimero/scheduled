@@ -1,12 +1,18 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from '../auth/auth.module';
+import { WhatsappModule } from '../whatsapp/whatsapp.module';
 import { AgendamientoController } from './agendamiento.controller';
 import { AgendamientoService } from './agendamiento.service';
 import { Agendamiento } from './entities/agendamiento.entity';
 import { BloqueoHorario } from './entities/bloqueo-horario.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Agendamiento, BloqueoHorario])],
+  imports: [
+    TypeOrmModule.forFeature([Agendamiento, BloqueoHorario]),
+    WhatsappModule,
+    AuthModule,
+  ],
   controllers: [AgendamientoController],
   providers: [AgendamientoService],
 })

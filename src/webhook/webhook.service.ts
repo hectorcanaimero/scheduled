@@ -4,10 +4,13 @@ import {
   MessageDataDto,
   ConnectionDataDto,
 } from './dto/whatsapp-event.dto';
+import { ReceptionAgentService } from '../reception-agent/reception-agent.service';
 
 @Injectable()
 export class WebhookService {
   private readonly logger = new Logger(WebhookService.name);
+
+  constructor(private readonly receptionAgent: ReceptionAgentService) {}
 
   async handleWhatsappEvent(event: WhatsappEventDto): Promise<void> {
     this.logger.log(`Received event: ${event.event} from instance: ${event.instance}`);
@@ -50,7 +53,7 @@ export class WebhookService {
 
     this.logger.log(`Message from ${remoteJid} (${data.pushName}): ${text}`);
 
-    // TODO (AGD-001): route message to Insforge scheduling flow
+    await this.receptionAgent.handleIncomingMessage(remoteJid, text, event.instance);
   }
 
   private async handleConnectionUpdate(event: WhatsappEventDto): Promise<void> {

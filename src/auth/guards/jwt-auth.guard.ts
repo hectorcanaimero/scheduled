@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-
+import { JwtPayload } from '../auth.types';
 interface JwtPayload {
   sub: string;
   clinica_id: string;
@@ -17,20 +17,19 @@ export class JwtAuthGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest<{ headers: Record<string, string>; user?: JwtPayload }>();
-    const token = this.extractToken(request.headers.authorization);
-    if (!token) throw new UnauthorizedException();
-
+    const token = this.extractToken(request);
+    if (!token) throw new UnauthorizedException('Token requerido');
     try {
       const payload = this.jwtService.verify<JwtPayload>(token);
       request.user = payload;
       return true;
     } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Token inválido o expirado');
     }
   }
 
-  private extractToken(authorization: string | undefined): string | null {
-    if (!authorization?.startsWith('Bearer ')) return null;
-    return authorization.slice(7);
+  private extractToken(request: { headers: Record<string, string> }): string | undefined {
+    const [type, token] = request.headers['authorization']?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }
