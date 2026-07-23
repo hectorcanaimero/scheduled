@@ -47,11 +47,11 @@ export class WebhookService {
     const text = this.extractMessageText(data);
 
     if (!text) {
-      this.logger.log(`Non-text message received from ${remoteJid}, skipping`);
+      this.logger.log(`Non-text message received from instance: ${event.instance}, skipping`);
       return;
     }
 
-    this.logger.log(`Message from ${remoteJid} (${data.pushName}): ${text}`);
+    this.logger.log(`Text message received from instance: ${event.instance}`);
 
     await this.receptionAgent.handleIncomingMessage(remoteJid, text, event.instance);
   }
