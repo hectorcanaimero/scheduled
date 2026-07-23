@@ -9,5 +9,6 @@ import { Clinica } from './entities/clinica.entity';
   imports: [TypeOrmModule.forFeature([Clinica]), AuthModule],
   controllers: [ClinicaController],
   providers: [ClinicaService],
+  exports: [ClinicaService],
 })
 export class ClinicaModule {}
