@@ -3,12 +3,14 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('clinicas')
 export class Clinica {
   @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
 
   @Column()
@@ -23,6 +25,11 @@ export class Clinica {
 
   @Column({ default: true })
   activa: boolean;
+  @Column({ nullable: true })
+  logo_url: string | null;
+
+  @Column({ nullable: true })
+  whatsapp_numero: string | null;
 
   @CreateDateColumn()
   created_at: Date;

@@ -4,6 +4,7 @@ import {
   MessageDataDto,
   ConnectionDataDto,
 } from './dto/whatsapp-event.dto';
+import { ReceptionAgentService } from '../reception-agent/reception-agent.service';
 
 @Injectable()
 export class WebhookService {
@@ -15,7 +16,8 @@ export class WebhookService {
     webhookToken: string,
   ): Promise<void> {
     this.logger.log(`Event: ${event.event} | instance: ${event.instance} | clinica: ${clinicaId}`);
-
+  constructor(private readonly receptionAgent: ReceptionAgentService) {}
+    this.logger.log(`Received event: ${event.event} from instance: ${event.instance}`);
     switch (event.event) {
       case 'MESSAGES_UPSERT':
         await this.handleMessageUpsert(event, clinicaId, webhookToken);
@@ -56,6 +58,8 @@ export class WebhookService {
     // Pass webhookToken as Authorization: Bearer <webhookToken> on downstream HTTP calls
     this.logger.log(`Message received | clinica: ${clinicaId} | sender: ${remoteJid}`);
     void webhookToken; // available for downstream HTTP clients
+    this.logger.log(`Message from ${remoteJid} (${data.pushName}): ${text}`);
+    await this.receptionAgent.handleIncomingMessage(remoteJid, text, event.instance);
   }
 
   private async handleConnectionUpdate(event: WhatsappEventDto): Promise<void> {

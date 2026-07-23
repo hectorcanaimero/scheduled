@@ -5,6 +5,7 @@ import { WebhookService } from './webhook.service';
 import { WebhookJwtService } from './webhook-jwt.service';
 import { WebhookJwtGuard } from './guards/webhook-jwt.guard';
 import { ClinicaModule } from '../clinica/clinica.module';
+import { ReceptionAgentModule } from '../reception-agent/reception-agent.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ClinicaModule } from '../clinica/clinica.module';
       secret: process.env.WEBHOOK_JWT_SECRET ?? 'changeme-set-in-env',
       signOptions: { expiresIn: '5m' },
     }),
+    ReceptionAgentModule
   ],
   controllers: [WebhookController],
   providers: [WebhookService, WebhookJwtService, WebhookJwtGuard],
