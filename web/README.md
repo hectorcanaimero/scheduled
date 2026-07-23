@@ -1,14 +1,12 @@
 # Scheduled Web
 
-Frontend público del flujo de confirmación de turnos.
-Frontend Next.js para la agenda de solo lectura del profesional.
+Panel web de recepción.
 
-```bash
-cp .env.example .env.local
-npm install
-npm run dev
-```
+## Desarrollo
 
-El enlace esperado es `/agendar/:clinicaId?token=:link_token`. La aplicación consulta `GET /agendamiento/:link_token` y confirma mediante `POST /agendamiento/:link_token/confirmar`.
-La vista pública está en `/agenda/:link_token` y consulta `GET /agenda/:link_token`
-en la URL configurada mediante `NEXT_PUBLIC_API_URL`.
+1. Copiar `.env.example` a `.env.local`.
+2. Definir `API_URL` con la URL del backend NestJS.
+3. Ejecutar `npm install` y `npm run dev`.
+
+El login se envía al Route Handler `/api/auth/login`, que delega en el backend
+y guarda el token resultante en una cookie `httpOnly`.
