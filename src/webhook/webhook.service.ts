@@ -10,14 +10,14 @@ import { ReceptionAgentService } from '../reception-agent/reception-agent.servic
 export class WebhookService {
   private readonly logger = new Logger(WebhookService.name);
 
+  constructor(private readonly receptionAgent: ReceptionAgentService) {}
+
   async handleWhatsappEvent(
     event: WhatsappEventDto,
     clinicaId: string,
     webhookToken: string,
   ): Promise<void> {
-    this.logger.log(`Event: ${event.event} | instance: ${event.instance} | clinica: ${clinicaId}`);
-  constructor(private readonly receptionAgent: ReceptionAgentService) {}
-    this.logger.log(`Received event: ${event.event} from instance: ${event.instance}`);
+    this.logger.log(`Received event: ${event.event} from instance: ${event.instance} | clinica: ${clinicaId}`);
     switch (event.event) {
       case 'MESSAGES_UPSERT':
         await this.handleMessageUpsert(event, clinicaId, webhookToken);

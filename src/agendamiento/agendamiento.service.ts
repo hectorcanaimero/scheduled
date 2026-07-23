@@ -33,7 +33,7 @@ export class AgendamientoService {
   async findByLinkToken(link_token: string): Promise<AgendamientoDetalleDto> {
     const turno = await this.turnoRepo.findOne({
       where: { link_token },
-      relations: ['profesional', 'disponibilidad', 'paciente'],
+      relations: { profesional: true, disponibilidad: true, paciente: true },
     });
 
     if (!turno) {
@@ -56,6 +56,8 @@ export class AgendamientoService {
       estado: turno.estado,
       paciente_nombre: turno.paciente.nombre,
     };
+  }
+
   async generarYEnviarLink(dto: GenerarLinkDto): Promise<{ link_token: string; link: string }> {
     const link_token = uuidv4();
     const baseUrl = process.env.SCHEDULING_BASE_URL ?? 'https://localhost:3000';
