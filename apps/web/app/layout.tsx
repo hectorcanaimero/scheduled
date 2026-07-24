@@ -3,6 +3,9 @@ import { Cormorant_Garamond, DM_Sans, Manrope } from "next/font/google";
 
 import "./globals.css";
 
+const sans = DM_Sans({ subsets: ["latin"], variable: "--font-sans" });
+const display = Fraunces({ subsets: ["latin"], variable: "--font-display" });
+
 const display = Cormorant_Garamond({
   subsets: ["latin"],
   variable: "--font-display",
@@ -22,8 +25,9 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Agendamiento",
-  description: "Sistema de agendamiento por WhatsApp para clínicas.",
+  title: "Tu consulta | Agendamiento",
+  description: "Revisá los datos de tu próxima consulta.",
+  themeColor: "#f3efe6",
 };
 
 export default function RootLayout({

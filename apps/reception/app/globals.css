@@ -1,0 +1,221 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: 30 32 30;
+  --ink-muted: 102 103 96;
+  --paper: 246 245 240;
+  --surface: 255 255 252;
+  --line: 222 221 212;
+  --accent: 142 75 54;
+  --accent-dark: 111 54 38;
+  --green: 38 112 89;
+  --danger: 180 59 59;
+}
+
+@layer base {
+  * {
+    @apply border-line;
+  }
+
+  body {
+    color: rgb(var(--ink));
+    background:
+      radial-gradient(circle at 78% 3%, rgba(180, 124, 89, 0.08), transparent 24rem),
+      rgb(var(--paper));
+    @apply font-sans antialiased;
+  }
+
+  button,
+  input {
+    @apply outline-none;
+  }
+}
+
+@layer utilities {
+  .text-ink { color: rgb(var(--ink)); }
+  .text-ink-muted { color: rgb(var(--ink-muted)); }
+  .text-line { color: rgb(var(--line)); }
+  .text-accent { color: rgb(var(--accent)); }
+  .text-success { color: rgb(var(--green)); }
+  .text-danger { color: rgb(var(--danger)); }
+  .bg-ink { background-color: rgb(var(--ink)); }
+  .border-line { border-color: rgb(var(--line)); }
+}
+
+.sidebar {
+  background:
+    linear-gradient(160deg, rgba(255,255,255,.035), transparent 40%),
+    #222b29;
+  @apply fixed inset-y-0 left-0 z-50 flex w-[272px] flex-col transition-transform duration-300 lg:sticky lg:top-0 lg:h-screen;
+}
+
+.brand-mark {
+  @apply grid h-9 w-9 place-items-center rounded-xl font-display text-xl font-bold text-white;
+  background: #a9654f;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.14);
+}
+
+.sidebar-label {
+  @apply mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.19em] text-white/30;
+}
+
+.sidebar-item {
+  @apply my-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium text-white/55 transition duration-200 hover:bg-white/[0.06] hover:text-white;
+}
+
+.sidebar-item-active {
+  @apply bg-white/[0.09] text-white;
+  box-shadow: inset 3px 0 #c47f63;
+}
+
+.topbar {
+  background: rgba(246, 245, 240, .84);
+  @apply sticky top-0 z-30 flex h-[78px] items-center border-b border-line px-5 backdrop-blur-xl sm:px-8 lg:px-12;
+}
+
+.icon-button {
+  @apply grid h-10 w-10 place-items-center rounded-xl text-ink-muted transition hover:bg-white hover:text-ink;
+}
+
+.notification-dot {
+  @apply absolute right-2.5 top-2.5 h-1.5 w-1.5 rounded-full;
+  background: rgb(var(--accent));
+  box-shadow: 0 0 0 2px rgb(var(--paper));
+}
+
+.avatar {
+  @apply ml-1 grid h-9 w-9 place-items-center overflow-hidden rounded-full text-xs font-bold;
+  color: rgb(var(--accent-dark));
+  background: #eaded5;
+}
+
+.tooltip {
+  @apply z-50 rounded-lg bg-ink px-3 py-2 text-xs text-white shadow-xl;
+}
+
+.eyebrow {
+  color: rgb(var(--accent));
+  @apply text-[11px] font-bold uppercase tracking-[0.2em];
+}
+
+.tabs-list {
+  @apply flex gap-7 border-b border-line;
+}
+
+.tab {
+  @apply relative pb-3 text-sm font-semibold text-ink-muted transition hover:text-ink;
+}
+
+.tab[data-state="active"] {
+  @apply text-ink;
+}
+
+.tab[data-state="active"]::after {
+  content: "";
+  @apply absolute inset-x-0 -bottom-px h-0.5 rounded-full;
+  background: rgb(var(--accent));
+}
+
+.settings-card {
+  background: rgb(var(--surface));
+  box-shadow: 0 16px 45px rgba(45, 42, 35, 0.045);
+  @apply overflow-hidden rounded-[20px] border border-line;
+}
+
+.card-heading {
+  @apply flex items-start gap-4 border-b border-line px-5 py-5 sm:px-7;
+}
+
+.card-heading h2 {
+  @apply text-base font-bold text-ink;
+}
+
+.card-heading p {
+  @apply mt-1 text-xs leading-5 text-ink-muted sm:text-sm;
+}
+
+.card-icon {
+  color: rgb(var(--accent));
+  background: #f4e8e1;
+  @apply grid h-10 w-10 shrink-0 place-items-center rounded-xl;
+}
+
+.card-icon-green {
+  color: rgb(var(--green));
+  background: #e5f0eb;
+}
+
+.card-body {
+  @apply px-5 py-6 sm:px-7 sm:py-7;
+}
+
+.field-label {
+  @apply mb-2 block text-xs font-bold text-ink;
+}
+
+.field-input {
+  @apply h-11 w-full rounded-xl border border-line bg-white px-3.5 text-sm text-ink shadow-sm transition placeholder:text-black/25 hover:border-black/20 focus:border-[#a9654f] focus:ring-4 focus:ring-[#a9654f]/10;
+}
+
+.logo-preview {
+  @apply grid aspect-square w-32 place-items-center overflow-hidden rounded-[24px] border border-line bg-[#efe6df] text-[#8e4b36] shadow-sm sm:w-36;
+}
+
+.logo-preview img {
+  @apply h-full w-full object-cover;
+}
+
+.connection-row {
+  background: #f7f8f4;
+  @apply mt-5 flex items-center gap-2 rounded-xl border border-line px-4 py-3 text-xs font-semibold text-ink-muted;
+}
+
+.connection-row code {
+  @apply rounded-md bg-white px-2 py-1 font-mono text-[10px] font-normal text-ink-muted;
+}
+
+.status-pulse {
+  background: #3b9a74;
+  box-shadow: 0 0 0 4px rgba(59,154,116,.12);
+  @apply h-2 w-2 shrink-0 rounded-full;
+}
+
+.button-primary,
+.button-secondary {
+  @apply inline-flex h-11 items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40;
+}
+
+.button-primary {
+  background: rgb(var(--accent));
+  @apply text-white shadow-[0_8px_20px_rgba(142,75,54,.18)] hover:-translate-y-0.5 hover:bg-[#7f402e];
+}
+
+.button-secondary {
+  @apply border border-line bg-white text-ink hover:bg-black/[0.02];
+}
+
+.empty-section {
+  background: rgb(var(--surface));
+  @apply mt-8 rounded-[20px] border border-dashed border-line px-8 py-14 text-center;
+}
+
+.empty-section .card-icon {
+  @apply mx-auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+:root { --ink:#17211c; --muted:#6d7771; --line:#dfe5df; --paper:#f4f6f2; --green:#315f4a; --display:var(--font-display); --body:var(--font-body); }
+*{box-sizing:border-box} body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body),sans-serif}button,input{font:inherit}button,a{color:inherit}.topbar{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 max(28px,calc((100vw - 1240px)/2));gap:48px}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-width:226px}.brand-mark{display:grid;place-items:center;width:37px;height:37px;border-radius:11px;background:var(--green);color:white;font:24px var(--display);box-shadow:inset 0 0 0 1px #ffffff3b}.brand strong,.profile strong{display:block;font-size:14px}.brand small,.profile small{display:block;color:var(--muted);font-size:11px;margin-top:2px}.topbar nav{align-self:stretch;display:flex;gap:4px}.topbar nav a{position:relative;display:flex;align-items:center;gap:8px;padding:0 17px;text-decoration:none;color:var(--muted);font-size:13px;font-weight:600}.topbar nav a.active{color:var(--green)}.topbar nav a.active:after{content:"";position:absolute;height:2px;left:13px;right:13px;bottom:0;background:var(--green)}.profile{margin-left:auto;display:flex;align-items:center;gap:10px}.avatar{width:34px;height:34px;border-radius:50%;background:#e1ebe5;color:var(--green);display:grid;place-items:center;font-size:11px;font-weight:800}.icon-button{position:relative;border:0;background:transparent;padding:8px}.icon-button i{position:absolute;width:6px;height:6px;background:#d67055;border:1px solid white;border-radius:50%;right:7px;top:6px}.shell{max-width:1240px;margin:0 auto;padding:50px 28px 70px}.eyebrow{display:flex;align-items:center;gap:9px;text-transform:uppercase;letter-spacing:.15em;color:var(--green);font-size:10px;font-weight:800}.eyebrow span{width:21px;height:1px;background:var(--green)}.headline{display:flex;align-items:flex-end;justify-content:space-between;margin:12px 0 32px}.headline h1{font:55px/1 var(--display),serif;margin:0;letter-spacing:-.02em}.headline p{color:var(--muted);margin:12px 0 0;font-size:14px}.date-button,.tools>button{height:40px;border:1px solid #d7ddd8;border-radius:10px;background:white;display:flex;align-items:center;gap:9px;padding:0 13px;font-size:12px;font-weight:650;box-shadow:0 1px 2px #14231b0a}.summary{display:grid;grid-template-columns:repeat(3,1fr);background:white;border:1px solid var(--line);border-radius:14px;margin-bottom:22px;overflow:hidden}.summary>div{display:flex;align-items:center;gap:13px;padding:17px 20px;border-right:1px solid var(--line)}.summary>div:last-child{border:0}.summary-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:10px}.summary-icon.green{background:#e4eee8;color:#315f4a}.summary-icon.amber{background:#f7ead5;color:#9b6827}.summary-icon.blue{background:#e4edf0;color:#426a78}.summary p{display:flex;align-items:baseline;gap:10px;margin:0}.summary small{display:block;color:var(--muted);font-size:11px}.summary strong{font:26px var(--display)}.summary em{margin-left:auto;font-style:normal;font-size:10px;color:#89928d;background:#f3f5f3;padding:4px 7px;border-radius:20px}.board{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 15px 40px #1e382a08}.toolbar{min-height:72px;display:flex;align-items:center;justify-content:space-between;padding:14px 17px;border-bottom:1px solid var(--line);gap:20px}.tabs{display:flex;gap:3px}.tabs button{border:0;background:transparent;padding:9px 11px;border-radius:8px;color:var(--muted);font-size:11px;font-weight:700}.tabs button span{margin-left:6px;padding:2px 6px;background:#eff2ef;border-radius:10px;font-size:9px}.tabs button[aria-selected=true]{background:#e9f0ec;color:var(--green)}.tabs button[aria-selected=true] span{background:#d5e3db}.tools{display:flex;gap:8px}.tools label{height:40px;border:1px solid #d7ddd8;border-radius:10px;display:flex;align-items:center;gap:8px;padding:0 11px;color:#89928d}.tools input{width:185px;border:0;outline:0;font-size:11px}.table-head,.appointment{display:grid;grid-template-columns:100px 1.45fr 1.25fr 150px 36px;align-items:center}.table-head{height:40px;background:#f8f9f7;color:#8b948e;padding:0 22px;text-transform:uppercase;font-size:9px;font-weight:800;letter-spacing:.11em;border-bottom:1px solid var(--line)}.appointment{position:relative;min-height:76px;padding:0 22px;border-bottom:1px solid #e8ece8;transition:background .2s ease,transform .2s ease}.appointment:last-child{border-bottom:0}.appointment:hover{background:#fbfcfa;transform:translateX(2px)}.appointment:before{content:"";position:absolute;left:0;width:3px;height:30px;border-radius:0 3px 3px 0}.appointment.confirmado:before{background:#5f8d75}.appointment.pendente:before{background:#d19b4c}.appointment.cancelado:before{background:#bf7063}.appointment time{font:23px var(--display)}.patient{display:flex;align-items:center;gap:11px}.patient>span{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#edf0ec;color:#52645a;font-size:10px;font-weight:800}.patient p,.doctor{margin:0}.patient strong,.doctor strong{display:block;font-size:12px}.patient small,.doctor small{display:block;color:var(--muted);font-size:10px;margin-top:5px}.status{justify-self:start;display:flex;align-items:center;gap:6px;padding:6px 9px;border-radius:20px;text-transform:capitalize;font-size:10px;font-weight:750}.status i{width:5px;height:5px;border-radius:50%;background:currentColor}.confirmado .status{background:#e7f0eb;color:#3f7258}.pendente .status{background:#faf0df;color:#9a6a29}.cancelado .status{background:#f6e8e5;color:#a35f54}.more{border:0;background:transparent;color:#8b948e;letter-spacing:2px}.empty{padding:70px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted)}.empty strong{color:var(--ink)}.empty span{font-size:12px}
+@media(max-width:850px){.topbar{padding:0 18px}.topbar nav,.profile-copy{display:none}.shell{padding:34px 18px}.headline{align-items:flex-start}.headline h1{font-size:43px}.headline p{max-width:440px}.summary{grid-template-columns:1fr}.summary>div{border-right:0;border-bottom:1px solid var(--line)}.toolbar{align-items:stretch;flex-direction:column}.tabs{overflow:auto}.tools label{flex:1}.tools input{width:100%}.table-head{display:none}.appointment{grid-template-columns:72px 1fr auto;gap:8px;padding:14px 16px}.doctor{grid-column:2}.status{grid-column:3;grid-row:1}.more{display:none}}
+@media(max-width:560px){.brand{min-width:0}.headline{display:block}.date-button{margin-top:22px}.headline h1{font-size:39px}.summary p{flex:1}.summary{margin-bottom:14px}.tools>button{font-size:0}.tabs button{white-space:nowrap}.appointment{grid-template-columns:62px 1fr}.status{grid-column:2;grid-row:3;margin-top:5px}.patient>span{display:none}.appointment time{font-size:20px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
