@@ -380,9 +380,6 @@ input {
     transition-duration: .01ms !important;
   }
 }
-  background: var(--paper);
-  font-family: var(--font-body), sans-serif;
-}
 
 .appointment-page {
   position: relative;
@@ -762,12 +759,5 @@ input {
     animation-iteration-count: 1 !important;
   }
 }
-  background:
-    radial-gradient(circle at 88% 4%, rgba(211, 229, 216, .75), transparent 25rem),
-    linear-gradient(rgba(23, 53, 47, .025) 1px, transparent 1px),
-    var(--paper);
-  background-size: auto, 100% 28px, auto;
-  font-family: var(--font-body), sans-serif;
-}
 
-::selection { background: var(--ink); color: var(--card); }
+::selection { background: var(--ink); color: var(--paper); }

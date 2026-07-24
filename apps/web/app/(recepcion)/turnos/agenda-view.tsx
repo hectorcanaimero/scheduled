@@ -29,7 +29,7 @@ export function AgendaView({ initialTurnos }: { initialTurnos: readonly Turno[] 
       </header>
 
       <section className="shell" id="agenda">
-        <div className="eyebrow"><span /> quarta-feira, 23 de julho</div>
+        <div className="eyebrow-agenda"><span /> quarta-feira, 23 de julho</div>
         <div className="headline"><div><h1>Agenda do dia</h1><p>Acompanhe o ritmo da clínica e mantenha cada consulta no lugar certo.</p></div><button className="date-button"><CalendarDays size={17} />Hoje, 23 jul.<ChevronDown size={15} /></button></div>
 
         <section className="summary" aria-label="Resumo do dia">

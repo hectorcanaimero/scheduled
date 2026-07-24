@@ -9,10 +9,8 @@
   "scripts": {
     "dev:api": "pnpm --filter @scheduled/api start:dev",
     "dev:web": "pnpm --filter @scheduled/web dev",
-    "dev:reception": "pnpm --filter @scheduled/reception dev",
     "build:api": "pnpm --filter @scheduled/api build",
     "build:web": "pnpm --filter @scheduled/web build",
-    "build:reception": "pnpm --filter @scheduled/reception build",
     "test": "pnpm --filter @scheduled/api test",
     "lint": "pnpm -r lint"
   }

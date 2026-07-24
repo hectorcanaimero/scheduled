@@ -1,5 +1,5 @@
 import { ClinicSettings } from "@/components/clinic-settings";
 
-export default function SettingsPage() {
+export default function ConfiguracionPage() {
   return <ClinicSettings />;
 }
