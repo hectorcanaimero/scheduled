@@ -1,5 +1,5 @@
 {
-  "name": "scheduled-web",
+  "name": "@scheduled/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
